@@ -1,7 +1,50 @@
+import { useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
+import LeftPanel from './components/LeftPanel'
+import TrainingForm from './components/TrainingForm'
+import ConfirmCard from './components/ConfirmCard'
+
 function App() {
+  const [treinoRegistrado, setTreinoRegistrado] = useState(null)
+
+  function handleRegistrar(dadosTreino) {
+    setTreinoRegistrado(dadosTreino)
+  }
+
+  function handleNovoRegistro() {
+    setTreinoRegistrado(null)
+  }
+
+  //esse é o estado mais importante do app inteiro. quando é null, significa "nenhum treino registrado ainda" - > mostra o formulário. quando tem um objeto dentro, significa "treino registrado" -> mostra a confirmação. 
+
   return (
-    <div className="bg-black min-h-screen flex items-center justify-center">
-      <h1 className="text-orange-500 text-4xl font-bold">TrackRun.</h1>
+    <div className="min-h-screen flex bg-black">
+      <LeftPanel />
+      <div className="flex-1 flex items-center justify-center p-8">
+        <AnimatePresence mode="wait"> // isso é tipo um interruptor que troca entre o formulário e a confirmação, com uma animação suave. mode="wait" faz com que ele espere a animação de saída terminar antes de mostrar o próximo componente.
+          {treinoRegistrado === null ? (
+            <motion.div
+              key="form"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.3 }}
+            >
+              <TrainingForm onRegistrar={handleRegistrar} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="confirm"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ConfirmCard treino={treinoRegistrado} onNovoRegistro={handleNovoRegistro} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   )
 }
