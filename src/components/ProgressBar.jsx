@@ -2,7 +2,7 @@ function ProgressBar({ progresso }) { //esse componente espera receber algo de f
     return (
     <div className="mb-5">
       <div className="flex justify-between mb-1">
-        <span className="text-[10px] text-neutral-500 uppercase tracking-widest">
+        <span className="text-[10px] text-neutral-300 lg:text-neutral-500 uppercase tracking-widest">
           Progresso
         </span>
         <span className="text-[10px] text-orange-500 font-medium">

@@ -5,8 +5,6 @@ const labelsSensacao = {
   limite: 'No limite',
 }
 
-// um objeto que traduz o valor interno pro texto que o usuário vê. chamamos isso de mapeamento. estou usando um objeto como dicionário, ao invés de um monte de if/else.
-
 function ConfirmCard({ treino, onNovoRegistro }) {
   return (
     <div className="max-w-md flex flex-col items-center text-center">
@@ -23,29 +21,29 @@ function ConfirmCard({ treino, onNovoRegistro }) {
         </svg>
       </div>
 
-      <h2 className="text-xl font-medium text-white mb-1">Treino registrado!</h2>
-      <p className="text-xs text-neutral-500 mb-6">Seu treino foi salvo com sucesso.</p>
+      <h2 className="text-2xl lg:text-xl font-medium text-white mb-1">Treino registrado!</h2>
+      <p className="text-sm lg:text-xs text-neutral-300 lg:text-neutral-500 mb-6">Seu treino foi salvo com sucesso.</p>
 
       <div className="grid grid-cols-2 gap-2 w-full mb-6">
         <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-3 text-left">
-          <p className="text-[9px] text-neutral-500 uppercase tracking-widest mb-1">Distância</p>
+          <p className="text-[9px] text-neutral-400 lg:text-neutral-500 uppercase tracking-widest mb-1">Distância</p>
           <p className="text-base font-medium text-white">{treino.distancia} km</p>
         </div>
 
         <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-3 text-left">
-          <p className="text-[9px] text-neutral-500 uppercase tracking-widest mb-1">Tempo</p>
+          <p className="text-[9px] text-neutral-400 lg:text-neutral-500 uppercase tracking-widest mb-1">Tempo</p>
           <p className="text-base font-medium text-white">{treino.tempo}</p>
         </div>
 
         <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-3 text-left">
-          <p className="text-[9px] text-neutral-500 uppercase tracking-widest mb-1">Sensação</p>
+          <p className="text-[9px] text-neutral-400 lg:text-neutral-500 uppercase tracking-widest mb-1">Sensação</p>
           <p className="text-base font-medium text-white">
             {labelsSensacao[treino.sensacao] ?? '—'}
           </p>
         </div>
 
         <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-3 text-left">
-          <p className="text-[9px] text-neutral-500 uppercase tracking-widest mb-1">Observações</p>
+          <p className="text-[9px] text-neutral-400 lg:text-neutral-500 uppercase tracking-widest mb-1">Observações</p>
           <p className="text-xs text-neutral-300 line-clamp-2">
             {treino.observacoes || '—'}
           </p>
@@ -64,25 +62,3 @@ function ConfirmCard({ treino, onNovoRegistro }) {
 }
 
 export default ConfirmCard
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// esse componente recebe os dados do treino via props (distancia, tempo, sensacao, observacoes). recebe uma funcao onNovoRegistro via props (pra avisar o pai quando quiser voltar)
-// exibe tudo em formato de "comprovante"
-
-// esse componente nao tem useState, ele só exibe o que recebe. É um componente "burro".

@@ -21,13 +21,22 @@ function App() {
 
   return (
     <div className="min-h-screen flex bg-black">
+
+      {/* layout mobile: fundo com imagem do corredor */}
+      <div
+        className="lg:hidden fixed inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/corrida-sol.jpg')" }}
+      >
+        <div className="absolute inset-0 bg-black/70"></div>
+      </div>
+
+      {/* painel esquerdo — só aparece em desktop */}
       <LeftPanel />
-      <div className="flex-1 flex items-center justify-center p-8">
+
+      {/* área do formulário */}
+      <div className="relative flex-1 flex items-center justify-center p-6 lg:p-8">
         <div className="w-full max-w-md">
-          {/* isso é tipo um interruptor que troca entre o formulário e a
-              confirmação, com uma animação suave. mode="wait" faz com que
-              ele espere a animação de saída terminar antes de mostrar o
-              próximo componente. */}
+          {/* interruptor entre formulário e confirmação com animação suave */}
           <AnimatePresence mode="wait">
             {treinoRegistrado === null ? (
               <motion.div
@@ -53,6 +62,7 @@ function App() {
           </AnimatePresence>
         </div>
       </div>
+
     </div>
   )
 }
