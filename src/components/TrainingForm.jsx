@@ -8,9 +8,6 @@ function TrainingForm({ onRegistrar }) {
   const [sensacao, setSensacao] = useState(null)
   const [observacoes, setObservacoes] = useState('')
 
-  //Multiplos useState para cada campo do formulário, assim eu consigo controlar o valor individualmente.
-  //cada campo do formulário tem a sua própria "caixa de memória". quando o usuário digita, o estado correspondente atualiza.
-
   const camposPreenchidos = [
     distancia !== '',
     tempo !== '',
@@ -19,8 +16,6 @@ function TrainingForm({ onRegistrar }) {
   ].filter(Boolean).length
 
   const progresso = Math.round((camposPreenchidos / 4) * 100)
-
-  // isso cria uma lista de true / false (cada campo preenchido ou não), filtra só os true (.filter(Boolean)), conta quantos sobraram (.length) e calcula a porcentagem de progresso.Esse é o progresso real uqe alimenta a ProgressBar, diferente do valor fixo que eu tinha colocado antes só pra testar.
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -93,7 +88,7 @@ function TrainingForm({ onRegistrar }) {
 
       <button
         type="submit"
-        className="w-full bg-orange-500 hover:opacity-90 transition-opacity rounded-lg h-12 text-white text-sm font-medium tracking-widest uppercase"
+        className="w-full border border-orange-500 bg-orange-500 hover:bg-transparent hover:text-orange-500 text-white transition-all duration-300 rounded-lg h-12 text-sm font-medium tracking-widest uppercase"
       >
         Registrar treino
       </button>
@@ -102,8 +97,3 @@ function TrainingForm({ onRegistrar }) {
 }
 
 export default TrainingForm
-
-
-
-
-// componente mais robusto, aqui eu vou juntar tudo: os campos de input, a ProgressBar e as SensacaoTags.E calcular o progresso de verdade (não mais o valor fixo,exemplo 65 que usei pra testar)
