@@ -1,3 +1,11 @@
+import { motion } from 'motion/react'
+
+const fadeLeft = (delay = 0) => ({
+  initial: { opacity: 0, x: -24 },
+  animate: { opacity: 1, x: 0 },
+  transition: { duration: 0.5, delay },
+})
+
 function LeftPanel() {
   return (
     <div
@@ -6,20 +14,20 @@ function LeftPanel() {
     >
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40"></div>
 
-      <div className="relative z-10 inline-flex items-center gap-2 self-start text-orange-500 text-xs font-medium tracking-widest uppercase border border-orange-500/50 rounded-full px-3 py-1 mb-4 animate-pulse">
+      <motion.div {...fadeLeft(0.1)} className="relative z-10 inline-flex items-center gap-2 self-start text-orange-500 text-xs font-medium tracking-widest uppercase border border-orange-500/50 rounded-full px-3 py-1 mb-4 animate-pulse">
         TrackRun.
-      </div>
+      </motion.div>
 
-      <h1 className="relative z-10 text-4xl font-semibold text-white leading-tight uppercase tracking-tight mb-2 max-w-lg">
+      <motion.h1 {...fadeLeft(0.2)} className="relative z-10 text-4xl font-semibold text-white leading-tight uppercase tracking-tight mb-2">
         Cada km <br />
         é uma <span className="text-orange-500">vitória.</span>
-      </h1>
+      </motion.h1>
 
-      <p className="relative z-10 text-sm text-neutral-200 max-w-xs mb-8">
+      <motion.p {...fadeLeft(0.3)} className="relative z-10 text-sm text-neutral-200 max-w-xs mb-8">
         Registre sua corrida, acompanhe sua evolução e nunca perca um treino.
-      </p>
+      </motion.p>
 
-      <div className="relative z-10 flex gap-8">
+      <motion.div {...fadeLeft(0.4)} className="relative z-10 flex gap-8">
         <div>
           <p className="text-xl font-semibold text-white">847</p>
           <p className="text-[10px] text-orange-500/70 uppercase tracking-wide">Treinos</p>
@@ -32,7 +40,7 @@ function LeftPanel() {
           <p className="text-xl font-semibold text-white">JP</p>
           <p className="text-[10px] text-orange-500/70 uppercase tracking-wide">João Pessoa</p>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }
