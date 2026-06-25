@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import LeftPanel from './components/LeftPanel'
 import TrainingForm from './components/TrainingForm'
 import ConfirmCard from './components/ConfirmCard'
-import { supabase } from './supabase'
+
 
 function App() {
   const [treinoRegistrado, setTreinoRegistrado] = useState(null)
