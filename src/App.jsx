@@ -1,16 +1,28 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
+import { supabase } from './supabase'
 import LeftPanel from './components/LeftPanel'
 import TrainingForm from './components/TrainingForm'
 import ConfirmCard from './components/ConfirmCard'
+import LoginForm from './components/LoginForm'
+import RegisterForm from './components/RegisterForm'
 
 
 function App() {
+  const [usuarioLogado, setUsuarioLogado] = useState(false)
+  const [verificando, setVerificando] = useState(true)
+  const [tela, setTela] = useState('login') // 'login' ou 'cadastro'
+
   const [treinoRegistrado, setTreinoRegistrado] = useState(null)
 
-  // esse é o estado mais importante do app inteiro. quando é null, significa
-  // "nenhum treino registrado ainda" -> mostra o formulário. quando tem um
-  // objeto dentro, significa "treino registrado" -> mostra a confirmação.
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        setUsuarioLogado(true)
+      }
+      setVerificando(false)
+    })
+  }, [])
 
   function handleRegistrar(dadosTreino) {
     setTreinoRegistrado(dadosTreino)
@@ -20,10 +32,12 @@ function App() {
     setTreinoRegistrado(null)
   }
 
+  if (verificando) return null
+
   return (
     <div className="min-h-screen flex bg-black">
 
-      {/* layout mobile: fundo com imagem do corredor */}
+      {/* fundo mobile */}
       <div
         className="lg:hidden fixed inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/images/corrida-sol.jpg')" }}
@@ -31,15 +45,46 @@ function App() {
         <div className="absolute inset-0 bg-black/70"></div>
       </div>
 
-      {/* painel esquerdo — só aparece em desktop */}
       <LeftPanel />
 
-      {/* área do formulário */}
       <div className="relative flex-1 flex items-center justify-center p-6 lg:p-8">
         <div className="w-full max-w-md">
-          {/* interruptor entre formulário e confirmação com animação suave */}
           <AnimatePresence mode="wait">
-            {treinoRegistrado === null ? (
+
+            {!usuarioLogado ? (
+
+              // não está logado — decide entre login e cadastro
+              tela === 'login' ? (
+                <motion.div
+                  key="login"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <LoginForm
+                    onLoginSucesso={() => setUsuarioLogado(true)}
+                    onIrParaCadastro={() => setTela('cadastro')}
+                  />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="cadastro"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <RegisterForm
+                    onCadastroSucesso={() => setUsuarioLogado(true)}
+                    onVoltarLogin={() => setTela('login')}
+                  />
+                </motion.div>
+              )
+
+            ) : treinoRegistrado === null ? (
+
+              // logado, sem treino registrado
               <motion.div
                 key="form"
                 initial={{ opacity: 0, y: 16 }}
@@ -50,6 +95,8 @@ function App() {
                 <TrainingForm onRegistrar={handleRegistrar} />
               </motion.div>
             ) : (
+
+              // logado, treino registrado
               <motion.div
                 key="confirm"
                 initial={{ opacity: 0, y: 16 }}
@@ -60,6 +107,7 @@ function App() {
                 <ConfirmCard treino={treinoRegistrado} onNovoRegistro={handleNovoRegistro} />
               </motion.div>
             )}
+
           </AnimatePresence>
         </div>
       </div>
