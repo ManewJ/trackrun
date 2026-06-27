@@ -17,26 +17,32 @@ Quem treina com orientação sabe como é: atualizações de treino pelo WhatsAp
 O TrackRun é desenvolvido de forma iterativa, evoluindo como um produto real ao longo de três fases:
 
 ### ✅ Fase 1 — Interface e registro de treino
-Interface de registro de sessões de corrida com identidade visual própria, animações fluidas e foco em UX. Construída inteiramente no front-end.
+Interface de registro de sessões de corrida com identidade visual própria, animações fluidas e foco em UX.
 
 **Inclui:**
 - Layout split-screen com painel visual e formulário
 - Barra de progresso dinâmica
 - Tags de sensação com ícones interativos
 - Animações com Motion (Framer Motion)
-- Design responsivo (mobile-first ao final da fase)
+- Design responsivo
 
-### 🔄 Fase 2 — Autenticação e feed do atleta *(em desenvolvimento)*
-Integração com banco de dados real, autenticação de usuários e feed de treinos com possibilidade de feedback do treinador.
+### 🔄 Fase 2 — Autenticação e feed do atleta *(em andamento)*
+Integração com banco de dados real, autenticação de usuários e feed de treinos.
 
 **Inclui:**
-- Autenticação com Supabase Auth
-- Banco de dados PostgreSQL via Supabase
-- Feed de treinos do atleta
-- Sistema de feedback do treinador
+- Autenticação com Supabase Auth (login e cadastro)
+- Persistência de sessão
+- Perfis com tipo: atleta ou profissional
+- Feed de treinos do atleta com histórico completo
+- Dados salvos em banco PostgreSQL via Supabase
+- Redirecionamento por tipo de usuário após login
+
+![TrackRun - Login](./trackrun-login.png)
+
+![TrackRun - Feed do Atleta](./trackrun-feed.png)
 
 ### 🔜 Fase 3 — Ecossistema completo *(planejado)*
-Visão completa do produto: painel do treinador, histórico de evolução, notificações e comunicação estruturada entre atleta e profissional.
+Painel do treinador, sistema de feedbacks, histórico de evolução e comunicação estruturada entre atleta e profissional.
 
 ---
 
