@@ -67,14 +67,14 @@ function LoginForm({ onLoginSucesso, onIrParaCadastro }) {
         <p className="text-red-400 text-sm mb-4">{erro}</p>
       )}
 
-      {/* botão de login */}
+      {/* botão de login — mesmo efeito hover do TrainingForm */}
       <button
         type="button"
         onClick={handleLogin}
         disabled={carregando}
-        className="w-full bg-[#FF4500] text-white font-bold tracking-widest py-4 rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 mb-4"
+        className="w-full border border-orange-500 bg-orange-500 hover:bg-transparent hover:text-orange-500 text-white font-bold tracking-widest py-4 rounded-lg transition-all duration-300 disabled:opacity-50 mb-4"
       >
-        {carregando ? 'ENTRANDO...' : 'ENTRAR'}
+        {carregando ? 'AQUECENDO...' : 'ENTRAR'}
       </button>
 
       {/* link pra ir pro cadastro */}

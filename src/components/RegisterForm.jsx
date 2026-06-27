@@ -41,6 +41,10 @@ function RegisterForm({ onCadastroSucesso, onVoltarLogin }) {
 }
 
     // tudo certo — avisa o App.jsx
+    setNome('')
+    setEmail('')
+    setSenha('')
+    setTipo('atleta')
     onCadastroSucesso()
   }
 
