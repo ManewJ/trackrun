@@ -6,14 +6,18 @@ import TrainingForm from './components/TrainingForm'
 import ConfirmCard from './components/ConfirmCard'
 import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
+import AtletaFeed from './components/AtletaFeed'
 
 
 function App() {
   const [usuarioLogado, setUsuarioLogado] = useState(false)
   const [verificando, setVerificando] = useState(true)
   const [tela, setTela] = useState('login') // 'login' ou 'cadastro'
-
   const [treinoRegistrado, setTreinoRegistrado] = useState(null)
+  const [verTreinos, setVerTreinos] = useState(false)
+
+  // verTreinos = true -> mostra o feed
+  // verTreinos = false -> mostra formulário ou confirmação
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -30,6 +34,7 @@ function App() {
 
   function handleNovoRegistro() {
     setTreinoRegistrado(null)
+    setVerTreinos(false) // volta pro formulário
   }
 
   if (verificando) return null
@@ -53,7 +58,6 @@ function App() {
 
             {!usuarioLogado ? (
 
-              // não está logado — decide entre login e cadastro
               tela === 'login' ? (
                 <motion.div
                   key="login"
@@ -82,6 +86,19 @@ function App() {
                 </motion.div>
               )
 
+            ) : verTreinos ? (
+
+              // está logado e quer ver o feed
+              <motion.div
+                key="feed"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.3 }}
+              >
+                <AtletaFeed onNovoRegistro={handleNovoRegistro} />
+              </motion.div>
+
             ) : treinoRegistrado === null ? (
 
               // logado, sem treino registrado
@@ -96,7 +113,7 @@ function App() {
               </motion.div>
             ) : (
 
-              // logado, treino registrado
+              // logado, treino registrado — mostra confirmação
               <motion.div
                 key="confirm"
                 initial={{ opacity: 0, y: 16 }}
@@ -104,7 +121,11 @@ function App() {
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.3 }}
               >
-                <ConfirmCard treino={treinoRegistrado} onNovoRegistro={handleNovoRegistro} />
+                <ConfirmCard
+                  treino={treinoRegistrado}
+                  onNovoRegistro={handleNovoRegistro}
+                  onVerTreinos={() => setVerTreinos(true)}
+                />
               </motion.div>
             )}
 

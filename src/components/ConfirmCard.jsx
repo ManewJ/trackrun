@@ -5,7 +5,8 @@ const labelsSensacao = {
   limite: 'No limite',
 }
 
-function ConfirmCard({ treino, onNovoRegistro }) {
+// recebe onVerTreinos: função chamada quando o atleta quer ver o histórico
+function ConfirmCard({ treino, onNovoRegistro, onVerTreinos }) {
   return (
     <div className="max-w-md flex flex-col items-center text-center">
       <div className="w-14 h-14 rounded-full bg-orange-500/10 border
@@ -50,6 +51,15 @@ function ConfirmCard({ treino, onNovoRegistro }) {
         </div>
       </div>
 
+      {/* botão principal — ver histórico de treinos */}
+      <button
+        onClick={onVerTreinos}
+        className="w-full bg-[#FF4500] hover:bg-orange-600 transition-colors rounded-lg h-11 text-white text-xs font-bold tracking-widest uppercase mb-3"
+      >
+        Ver meus treinos
+      </button>
+
+      {/* botão secundário — registrar outro treino */}
       <button
         onClick={onNovoRegistro}
         className="w-full border border-neutral-700 hover:border-orange-500
@@ -57,6 +67,7 @@ function ConfirmCard({ treino, onNovoRegistro }) {
       >
         + Novo registro
       </button>
+
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
+import { supabase } from '../supabase'
 import ProgressBar from './ProgressBar'
 import SensacaoTags from './SensacaoTags'
 
@@ -24,8 +25,29 @@ function TrainingForm({ onRegistrar }) {
 
   const progresso = Math.round((camposPreenchidos / 4) * 100)
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
+
+    // busca o usuário logado direto do Supabase — sem depender de props
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // salva o treino no banco vinculado ao atleta logado
+    const { error } = await supabase
+      .from('treinos')
+      .insert({
+        atleta_id: user.id,
+        distancia,
+        tempo,
+        sensacao,
+        observacoes,
+      })
+
+    if (error) {
+      console.error('Erro ao salvar treino:', error.message)
+      return
+    }
+
+    // só chama onRegistrar depois de confirmar que salvou no banco
     onRegistrar({ distancia, tempo, sensacao, observacoes })
   }
 
