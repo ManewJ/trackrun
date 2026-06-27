@@ -15,18 +15,46 @@ function App() {
   const [tela, setTela] = useState('login') // 'login' ou 'cadastro'
   const [treinoRegistrado, setTreinoRegistrado] = useState(null)
   const [verTreinos, setVerTreinos] = useState(false)
+  const [tipoUsuario, setTipoUsuario] = useState(null) // 'atleta' ou 'profissional'
 
-  // verTreinos = true -> mostra o feed
-  // verTreinos = false -> mostra formulário ou confirmação
+  // tipoUsuario define qual painel mostrar depois do login
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(async ({ data }) => {
       if (data.session) {
         setUsuarioLogado(true)
+
+        // busca o perfil do usuário logado pra saber se é atleta ou profissional
+        const { data: perfil } = await supabase
+          .from('profiles')
+          .select('tipo')
+          .eq('id', data.session.user.id)
+          .single()
+
+        if (perfil) {
+          setTipoUsuario(perfil.tipo)
+        }
       }
       setVerificando(false)
     })
   }, [])
+
+  async function handleLoginSucesso() {
+    setUsuarioLogado(true)
+
+    // depois do login, busca o tipo do usuário
+    const { data: { user } } = await supabase.auth.getUser()
+
+    const { data: perfil } = await supabase
+      .from('profiles')
+      .select('tipo')
+      .eq('id', user.id)
+      .single()
+
+    if (perfil) {
+      setTipoUsuario(perfil.tipo)
+    }
+  }
 
   function handleRegistrar(dadosTreino) {
     setTreinoRegistrado(dadosTreino)
@@ -34,7 +62,7 @@ function App() {
 
   function handleNovoRegistro() {
     setTreinoRegistrado(null)
-    setVerTreinos(false) // volta pro formulário
+    setVerTreinos(false)
   }
 
   if (verificando) return null
@@ -67,7 +95,7 @@ function App() {
                   transition={{ duration: 0.3 }}
                 >
                   <LoginForm
-                    onLoginSucesso={() => setUsuarioLogado(true)}
+                    onLoginSucesso={handleLoginSucesso}
                     onIrParaCadastro={() => setTela('cadastro')}
                   />
                 </motion.div>
@@ -80,15 +108,32 @@ function App() {
                   transition={{ duration: 0.3 }}
                 >
                   <RegisterForm
-                    onCadastroSucesso={() => setUsuarioLogado(true)}
+                    onCadastroSucesso={handleLoginSucesso}
                     onVoltarLogin={() => setTela('login')}
                   />
                 </motion.div>
               )
 
+            ) : tipoUsuario === 'profissional' ? (
+
+              // profissional logado — painel do treinador (em breve)
+              <motion.div
+                key="profissional"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="text-white text-center">
+                  <p className="text-[#FF4500] font-bold tracking-widest text-sm mb-6">TRACKRUN.</p>
+                  <h1 className="text-3xl font-bold mb-2">Painel do treinador</h1>
+                  <p className="text-zinc-400 text-sm">Em breve...</p>
+                </div>
+              </motion.div>
+
             ) : verTreinos ? (
 
-              // está logado e quer ver o feed
+              // atleta quer ver o feed
               <motion.div
                 key="feed"
                 initial={{ opacity: 0, y: 16 }}
@@ -101,7 +146,7 @@ function App() {
 
             ) : treinoRegistrado === null ? (
 
-              // logado, sem treino registrado
+              // atleta logado, sem treino registrado
               <motion.div
                 key="form"
                 initial={{ opacity: 0, y: 16 }}
@@ -113,7 +158,7 @@ function App() {
               </motion.div>
             ) : (
 
-              // logado, treino registrado — mostra confirmação
+              // atleta logado, treino registrado
               <motion.div
                 key="confirm"
                 initial={{ opacity: 0, y: 16 }}
