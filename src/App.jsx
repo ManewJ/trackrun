@@ -34,6 +34,18 @@ function App() {
         if (perfil) {
           setTipoUsuario(perfil.tipo)
         }
+
+        // se for atleta, verifica se ele já tem treinos registrados
+        if (perfil?.tipo === 'atleta') {
+          const { count } = await supabase
+            .from('treinos')
+            .select('*', { count: 'exact', head: true })
+            .eq('atleta_id', data.session.user.id)
+
+          if (count > 0) {
+            setVerTreinos(true)
+          }
+        }
       }
       setVerificando(false)
     })
@@ -53,6 +65,19 @@ function App() {
 
     if (perfil) {
       setTipoUsuario(perfil.tipo)
+    }
+
+    // se for atleta, verifica se ele já tem treinos registrados
+    if (perfil?.tipo === 'atleta') {
+      const { count } = await supabase
+        .from('treinos')
+        .select('*', { count: 'exact', head: true })
+        .eq('atleta_id', user.id)
+
+      // se já tem pelo menos um treino, abre direto no feed
+      if (count > 0) {
+        setVerTreinos(true)
+      }
     }
   }
 

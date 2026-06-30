@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabase'
+import Header from './Header'
 
 const labelsSensacao = {
   leve: 'Leve',
@@ -38,7 +39,7 @@ function AtletaFeed({ onNovoRegistro }) {
   return (
     <div className="w-full text-white">
 
-      <p className="text-[#FF4500] font-bold tracking-widest text-sm mb-4">TRACKRUN.</p>
+      <Header />
       <h1 className="text-2xl font-bold mb-1">Meus treinos</h1>
       <p className="text-zinc-400 text-sm mb-6">Seu histórico de corridas</p>
 
