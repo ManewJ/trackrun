@@ -10,7 +10,7 @@ function ConfirmCard({ treino, onNovoRegistro, onVerTreinos }) {
   return (
     <div className="max-w-md flex flex-col items-center text-center">
       <div className="w-14 h-14 rounded-full bg-orange-500/10 border
-       border-orange-500/40 flex items-center justify-center mb-5">
+       border-orange-500/40 flex items-center justify-center mb-5 animated animate-pulse">
         <svg
           className="w-6 h-6 text-orange-500"
           fill="none"
