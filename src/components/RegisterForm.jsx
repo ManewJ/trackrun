@@ -15,38 +15,52 @@ function RegisterForm({ onCadastroSucesso, onVoltarLogin }) {
   const [erro, setErro] = useState(null)
 
   async function handleCadastro() {
-    setCarregando(true)
     setErro(null)
 
-    // passo 1 — cria o usuário no sistema de autenticação do Supabase
-    const { data, error } = await supabase.auth.signUp({ email, password: senha })
+  // validação — roda antes de qualquer chamada ao Supabase
 
-    if (error) {
-      setErro('Não foi possível criar a conta. Tente novamente.')
-      setCarregando(false)
-      return
-    }
+  // verifica se o e-mail tem formato válido (algo@algo.algo)
+  const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
-    // passo 2 — salva o nome e tipo na tabela profiles
-    // data.user.id é o id gerado automaticamente pelo Supabase
-    
-   const { error: erroProfile } = await supabase
+  if (!emailValido) {
+    setErro('Digite um e-mail válido.')
+    return
+  }
+
+  if (senha.length < 6) {
+    setErro('A senha precisa ter no mínimo 6 caracteres.')
+    return
+  }
+
+  setCarregando(true)
+
+  // passo 1 — cria o usuário no sistema de autenticação do Supabase
+  const { data, error } = await supabase.auth.signUp({ email, password: senha })
+
+  if (error) {
+    setErro('Não foi possível criar a conta. Tente novamente.')
+    setCarregando(false)
+    return
+  }
+
+  // passo 2 — salva o nome e tipo na tabela profiles
+  const { error: erroProfile } = await supabase
     .from('profiles')
     .insert({ id: data.user.id, nome, email, tipo })
 
-   if (erroProfile) {
-    setErro(`Erro: ${erroProfile.message}`) // mostra o erro real na tela
+  if (erroProfile) {
+    setErro(`Erro: ${erroProfile.message}`)
     setCarregando(false)
     return
-}
-
-    // tudo certo — avisa o App.jsx
-    setNome('')
-    setEmail('')
-    setSenha('')
-    setTipo('atleta')
-    onCadastroSucesso()
   }
+
+  // tudo certo — avisa o App.jsx
+  setNome('')
+  setEmail('')
+  setSenha('')
+  setTipo('atleta')
+  onCadastroSucesso()
+}
 
   return (
     <div className="text-white">

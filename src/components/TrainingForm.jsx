@@ -71,17 +71,26 @@ function TrainingForm({ onRegistrar }) {
       <motion.div {...fadeUp(0.2)} className="grid grid-cols-2 gap-3 mb-3">
         <div className="flex flex-col gap-1">
           <label className="text-[10px] font-medium text-neutral-400 lg:text-neutral-500 uppercase tracking-widest">
-            Distância (km)
+            Distância
           </label>
-          <input
-            type="number"
-            step="0.1"
-            value={distancia}
-            onChange={(e) => setDistancia(e.target.value)}
-            placeholder="Ex: 10.5"
-            className="bg-neutral-900 border border-neutral-800 rounded-lg h-10 px-3 text-white text-sm placeholder-neutral-700
-             focus:border-orange-500 outline-none transition-colors"
-          />
+          {/* div relativa — permite posicionar o "km" por cima do input */}
+          <div className="relative">
+            <input
+              type="number"
+              step="0.1"
+              value={distancia}
+              onChange={(e) => setDistancia(e.target.value)}
+              placeholder="Ex: 10.5"
+              className="w-full bg-neutral-900 border border-neutral-800 rounded-lg h-10 pl-3 pr-9 text-white text-sm placeholder-neutral-700
+               focus:border-orange-500 outline-none transition-colors"
+            />
+            {/* "km" só aparece quando o campo tem algum valor digitado */}
+            {distancia !== '' && (
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 text-sm pointer-events-none">
+                km
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex flex-col gap-1">
