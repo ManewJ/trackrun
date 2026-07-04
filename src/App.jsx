@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { supabase } from './supabase'
 import LeftPanel from './components/LeftPanel'
@@ -9,6 +9,7 @@ import RegisterForm from './components/RegisterForm'
 import AtletaFeed from './components/AtletaFeed'
 
 
+
 function App() {
   const [usuarioLogado, setUsuarioLogado] = useState(false)
   const [verificando, setVerificando] = useState(true)
@@ -16,6 +17,8 @@ function App() {
   const [treinoRegistrado, setTreinoRegistrado] = useState(null)
   const [verTreinos, setVerTreinos] = useState(false)
   const [tipoUsuario, setTipoUsuario] = useState(null) // 'atleta' ou 'profissional'
+  const painelDireitoRef = useRef(null) // referência para o painel direito
+  const [scrollY, setScrollY] = useState(0) // estado para armazenar a posição de rolagem
 
   // tipoUsuario define qual painel mostrar depois do login
 
@@ -90,6 +93,12 @@ function App() {
     setVerTreinos(false)
   }
 
+  function handleScroll() {
+  if (painelDireitoRef.current) {
+    setScrollY(painelDireitoRef.current.scrollTop)
+  }
+}
+
   if (verificando) return null
 
   return (
@@ -114,16 +123,21 @@ function App() {
       {/* imagem do painel esquerdo muda conforme o contexto do usuário */}
       <LeftPanel
         imagem={
-          !usuarioLogado
-            ? '/images/corrida-sol.jpg'
-            : tipoUsuario === 'profissional'
-            ? '/images/treinador01.jpg'
-            : '/images/pista-corrida-dois.jpg'
-        }
-      />
+        !usuarioLogado
+          ? '/images/corrida-sol.jpg'
+          : tipoUsuario === 'profissional'
+          ? '/images/treinador01.jpg'
+          : '/images/pista-corrida-dois.jpg'
+      }
+      scrollY={usuarioLogado ? scrollY : 0}
+    />
 
       {/* painel direito — rola internamente enquanto o LeftPanel fica fixo */}
-      <div className="relative flex-1 overflow-y-auto flex items-start justify-center p-6 lg:p-8">
+      <div
+        ref={painelDireitoRef}
+        onScroll={handleScroll}
+        className="relative flex-1 overflow-y-auto flex items-start justify-center p-6 lg:p-8"
+      >
         <div className="w-full max-w-md py-8">
           <AnimatePresence mode="wait">
 
