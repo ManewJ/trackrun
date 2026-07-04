@@ -37,10 +37,6 @@ Integração com banco de dados real, autenticação de usuários e feed de trei
 - Dados salvos em banco PostgreSQL via Supabase
 - Redirecionamento por tipo de usuário após login
 
-![TrackRun - Login](./trackrun-login.png)
-
-![TrackRun - Feed do Atleta](./trackrun-feed.png)
-
 ### 🔜 Fase 3 — Ecossistema completo *(planejado)*
 Painel do treinador, sistema de feedbacks, histórico de evolução e comunicação estruturada entre atleta e profissional.
 
@@ -95,6 +91,6 @@ Este projeto segue boas práticas de mercado desde o início:
 
 ## Autor
 
-Feito por **Manoel Justino** — Personal Trainer e Desenvolvedor front-end.
+Feito por **Manoel Justino** — Personal Trainer e desenvolvedor front-end.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Manoel%20Justino-0077B5?style=flat&logo=linkedin)](https://www.linkedin.com/in/manoel-justino-dev/)

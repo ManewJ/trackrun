@@ -1,4 +1,5 @@
-import { motion } from 'motion/react'
+import { motion, useTransform, useMotionValue } from 'motion/react'
+import { useEffect } from 'react'
 
 const fadeLeft = (delay = 0) => ({
   initial: { opacity: 0, x: -24 },
@@ -6,15 +7,37 @@ const fadeLeft = (delay = 0) => ({
   transition: { duration: 0.5, delay },
 })
 
-function LeftPanel() {
+// recebe imagem e scrollY como props
+// scrollY vem do painel direito e move a foto levemente pra cima — efeito parallax
+function LeftPanel({ imagem = '/images/corrida-sol.jpg', scrollY = 0 }) {
+
+  // converte o scrollY em deslocamento da foto
+  // a cada 1px de scroll no painel direito, a foto sobe 0.15px
+  const motionScrollY = useMotionValue(0)
+
+  useEffect(() => {
+    motionScrollY.set(scrollY)
+  }, [scrollY, motionScrollY])
+
+  const bgY = useTransform(motionScrollY, [0, 1000], ['0%', '-15%'])
+
   return (
-    <div
-      className="hidden lg:flex flex-1 relative flex-col justify-end p-12 overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/corrida-sol.jpg')" }}
-    >
+    <div className="hidden lg:flex flex-1 relative flex-col justify-end p-12 overflow-hidden">
+
+      {/* foto com parallax — se move levemente enquanto o feed rola */}
+      <motion.div
+        className="absolute inset-0 bg-cover bg-center scale-110"
+        style={{
+          backgroundImage: `url('${imagem}')`,
+          y: bgY,
+        }}
+      />
+
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40"></div>
 
-      <motion.div {...fadeLeft(0.1)} className="relative z-10 inline-flex items-center gap-2 self-start text-orange-500 text-xs font-medium tracking-widest uppercase border border-orange-500/50 rounded-full px-3 py-1 mb-4 animate-pulse">
+      <motion.div {...fadeLeft(0.1)} className="relative z-10 inline-flex items-center gap-2 self-start
+       text-orange-500 text-xs font-medium tracking-widest uppercase border
+        border-orange-500/50 rounded-full px-3 py-1 mb-4 animate-pulse">
         TrackRun.
       </motion.div>
 
