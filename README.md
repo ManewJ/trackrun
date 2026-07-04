@@ -26,7 +26,7 @@ Interface de registro de sessões de corrida com identidade visual própria, ani
 - Animações com Motion (Framer Motion)
 - Design responsivo
 
-### ✅ Fase 2 — Autenticação e feed do atleta *(em andamento)*
+### 🔄 Fase 2 — Autenticação e feed do atleta *(em andamento)*
 Integração com banco de dados real, autenticação de usuários e feed de treinos.
 
 **Inclui:**
