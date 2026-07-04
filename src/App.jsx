@@ -7,6 +7,7 @@ import ConfirmCard from './components/ConfirmCard'
 import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
 import AtletaFeed from './components/AtletaFeed'
+import Header from './components/Header'
 
 
 
@@ -180,11 +181,12 @@ function App() {
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="text-white text-center">
-                  <p className="text-[#FF4500] font-bold tracking-widest text-sm mb-6">TRACKRUN.</p>
+                <div className="text-white">
+                  <Header />
                   <h1 className="text-3xl font-bold mb-2">Painel do treinador</h1>
-                  <p className="text-zinc-400 text-sm">Em breve...</p>
+                  <p className="text-zinc-400 text-sm animate-pulse">Em breve...</p>
                 </div>
+
               </motion.div>
 
             ) : verTreinos ? (
