@@ -93,7 +93,7 @@ function App() {
   if (verificando) return null
 
   return (
-    <div className="min-h-screen flex bg-black">
+    <div className="h-screen overflow-hidden flex bg-black">
 
       {/* fundo mobile */}
       <div
@@ -105,8 +105,9 @@ function App() {
 
       <LeftPanel />
 
-      <div className="relative flex-1 flex items-center justify-center p-6 lg:p-8">
-        <div className="w-full max-w-md">
+      {/* painel direito — rola internamente enquanto o LeftPanel fica fixo */}
+      <div className="relative flex-1 overflow-y-auto flex items-start justify-center p-6 lg:p-8">
+        <div className="w-full max-w-md py-8">
           <AnimatePresence mode="wait">
 
             {!usuarioLogado ? (
@@ -141,7 +142,6 @@ function App() {
 
             ) : tipoUsuario === 'profissional' ? (
 
-              // profissional logado — painel do treinador (em breve)
               <motion.div
                 key="profissional"
                 initial={{ opacity: 0, y: 16 }}
@@ -158,7 +158,6 @@ function App() {
 
             ) : verTreinos ? (
 
-              // atleta quer ver o feed
               <motion.div
                 key="feed"
                 initial={{ opacity: 0, y: 16 }}
@@ -171,7 +170,6 @@ function App() {
 
             ) : treinoRegistrado === null ? (
 
-              // atleta logado, sem treino registrado
               <motion.div
                 key="form"
                 initial={{ opacity: 0, y: 16 }}
@@ -183,7 +181,6 @@ function App() {
               </motion.div>
             ) : (
 
-              // atleta logado, treino registrado
               <motion.div
                 key="confirm"
                 initial={{ opacity: 0, y: 16 }}
@@ -206,5 +203,5 @@ function App() {
     </div>
   )
 }
-
-export default App
+  
+  export default App
