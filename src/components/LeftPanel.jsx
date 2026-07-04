@@ -6,15 +6,18 @@ const fadeLeft = (delay = 0) => ({
   transition: { duration: 0.5, delay },
 })
 
-function LeftPanel() {
+// recebe imagem como prop — se não vier nenhuma, usa o padrão da tela inicial
+function LeftPanel({ imagem = '/images/corrida-sol.jpg' }) {
   return (
     <div
       className="hidden lg:flex flex-1 relative flex-col justify-end p-12 overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/corrida-sol.jpg')" }}
+      style={{ backgroundImage: `url('${imagem}')` }}
     >
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40"></div>
 
-      <motion.div {...fadeLeft(0.1)} className="relative z-10 inline-flex items-center gap-2 self-start text-orange-500 text-xs font-medium tracking-widest uppercase border border-orange-500/50 rounded-full px-3 py-1 mb-4 animate-pulse">
+      <motion.div {...fadeLeft(0.1)} className="relative z-10 inline-flex items-center gap-2 self-start
+       text-orange-500 text-xs font-medium tracking-widest uppercase border
+        border-orange-500/50 rounded-full px-3 py-1 mb-4 animate-pulse">
         TrackRun.
       </motion.div>
 

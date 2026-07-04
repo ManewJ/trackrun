@@ -95,15 +95,32 @@ function App() {
   return (
     <div className="h-screen overflow-hidden flex bg-black">
 
-      {/* fundo mobile */}
-      <div
-        className="lg:hidden fixed inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/corrida-sol.jpg')" }}
-      >
-        <div className="absolute inset-0 bg-black/70"></div>
-      </div>
+     {/* fundo mobile — imagem muda conforme o contexto do usuário */}
+<div
+  className="lg:hidden fixed inset-0 bg-cover bg-center"
+  style={{
+    backgroundImage: `url('${
+      !usuarioLogado
+        ? '/images/corrida-sol.jpg'
+        : tipoUsuario === 'profissional'
+        ? '/images/treinador01.jpg'
+        : '/images/pista-corrida-dois.jpg'
+    }')`
+  }}
+>
+  <div className="absolute inset-0 bg-black/70"></div>
+</div>
 
-      <LeftPanel />
+      {/* imagem do painel esquerdo muda conforme o contexto do usuário */}
+      <LeftPanel
+        imagem={
+          !usuarioLogado
+            ? '/images/corrida-sol.jpg'
+            : tipoUsuario === 'profissional'
+            ? '/images/treinador01.jpg'
+            : '/images/pista-corrida-dois.jpg'
+        }
+      />
 
       {/* painel direito — rola internamente enquanto o LeftPanel fica fixo */}
       <div className="relative flex-1 overflow-y-auto flex items-start justify-center p-6 lg:p-8">
@@ -203,5 +220,5 @@ function App() {
     </div>
   )
 }
-  
-  export default App
+
+export default App
