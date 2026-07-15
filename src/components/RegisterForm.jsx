@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../supabase'
+import { gerarCodigoConvite } from '../utils/gerarCodigo'
 
 // RegisterForm — tela de criação de conta
 // recebe onCadastroSucesso: função chamada quando o cadastro der certo
@@ -59,14 +60,7 @@ function RegisterForm({ onCadastroSucesso, onVoltarLogin }) {
     }
   }
 
-  // Fase 3 — gera código de convite pra treinador novo
-  // mesma corrente do SQL de ontem, em JavaScript:
-  // sorteia -> converte pra base 36 (letras+números) -> recorta 5 -> maiúsculas
-  function gerarCodigoConvite() {
-    return 'TR-' + Math.random().toString(36).substring(2, 7).toUpperCase()
-  }
-
-  async function handleCadastro() {
+   async function handleCadastro() {
     setErro(null)
 
     // validação — roda antes de qualquer chamada ao Supabase
