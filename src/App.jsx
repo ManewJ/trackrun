@@ -7,7 +7,7 @@ import ConfirmCard from './components/ConfirmCard'
 import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
 import AtletaFeed from './components/AtletaFeed'
-import Header from './components/Header'
+import PainelTreinador from './components/PainelTreinador'
 
 
 
@@ -181,12 +181,7 @@ function App() {
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="text-white">
-                  <Header />
-                  <h1 className="text-3xl font-bold mb-2">Painel do treinador</h1>
-                  <p className="text-zinc-400 text-sm animate-pulse">Em breve...</p>
-                </div>
-
+                <PainelTreinador />
               </motion.div>
 
             ) : verTreinos ? (
