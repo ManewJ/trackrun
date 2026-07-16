@@ -30,20 +30,22 @@ function PainelTreinador() {
       setCarregando(false)
     }
 
-    async function buscarPendentes(idDoTreinador) {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('id, nome')
-        .eq('treinador_id', idDoTreinador)
-        .eq('status_vinculo', 'pendente')
-
-      if (!error) {
-        setPendentes(data)
-      }
-    }
-
     buscarPerfil()
   }, [])
+
+  // busca todos os atletas pendentes do treinador logado
+  // extraída para fora do useEffect, pra poder ser chamada de novo depois de aceitar/recusar
+  async function buscarPendentes(idDoTreinador) {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id, nome')
+      .eq('treinador_id', idDoTreinador)
+      .eq('status_vinculo', 'pendente')
+
+    if (!error) {
+      setPendentes(data)
+    }
+  }
 
   // copia o código pra área de transferência e dá feedback visual temporário
   async function handleCopiar() {
@@ -53,6 +55,32 @@ function PainelTreinador() {
     setTimeout(() => {
       setTextoBotaoCopiar('Copiar')
     }, 2000)
+  }
+
+  // aceita o vínculo: o atleta já tem treinador_id apontando pra mim,
+  // só muda o status de 'pendente' para 'aceito'
+  async function handleAceitar(idDoAtleta) {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ status_vinculo: 'aceito' })
+      .eq('id', idDoAtleta)
+
+    if (!error) {
+      // atualiza a lista na tela, sem precisar recarregar a página
+      await buscarPendentes(perfil.id)
+    }
+  }
+
+  // recusa o vínculo: desfaz por completo, atleta volta a "sem vínculo"
+  async function handleRecusar(idDoAtleta) {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ treinador_id: null, status_vinculo: null })
+      .eq('id', idDoAtleta)
+
+    if (!error) {
+      await buscarPendentes(perfil.id)
+    }
   }
 
   if (carregando) {
@@ -118,17 +146,18 @@ function PainelTreinador() {
             >
               <p className="text-sm">{atleta.nome}</p>
 
-              {/* botões aceitar/recusar entram no próximo passo */}
               <div className="flex gap-2">
                 <button
                   type="button"
-                  className="bg-[#FF4500] text-white text-xs font-bold px-3 py-1.5 rounded-md"
+                  onClick={() => handleAceitar(atleta.id)}
+                  className="bg-[#FF4500] text-white text-xs font-bold px-3 py-1.5 rounded-md hover:bg-orange-600 transition-colors"
                 >
                   Aceitar
                 </button>
                 <button
                   type="button"
-                  className="bg-transparent text-zinc-400 border border-zinc-700 text-xs px-3 py-1.5 rounded-md"
+                  onClick={() => handleRecusar(atleta.id)}
+                  className="bg-transparent text-zinc-400 border border-zinc-700 text-xs px-3 py-1.5 rounded-md hover:bg-zinc-800 transition-colors"
                 >
                   Recusar
                 </button>
