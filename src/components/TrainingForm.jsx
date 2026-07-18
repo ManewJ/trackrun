@@ -4,6 +4,7 @@ import { supabase } from '../supabase'
 import ProgressBar from './ProgressBar'
 import SensacaoTags from './SensacaoTags'
 import Header from './Header'
+import AvisoVinculo from './AvisoVinculo'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 16 },
@@ -55,6 +56,7 @@ function TrainingForm({ onRegistrar }) {
   return (
     <>
       <Header />
+      <AvisoVinculo />
 
       <form onSubmit={handleSubmit} className="max-w-md">
 

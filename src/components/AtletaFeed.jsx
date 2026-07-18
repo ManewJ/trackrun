@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabase'
 import Header from './Header'
+import AvisoVinculo from './AvisoVinculo'
 import { Trash2 } from 'lucide-react'
 
 const labelsSensacao = {
@@ -59,6 +60,8 @@ function AtletaFeed({ onNovoRegistro }) {
       <Header />
       <h1 className="text-2xl font-bold mb-1">Meus treinos</h1>
       <p className="text-zinc-400 text-sm mb-6">Seu histórico de corridas</p>
+
+      <AvisoVinculo />
 
       {treinos.length === 0 ? (
         <div className="text-center text-zinc-500 text-sm py-12">
