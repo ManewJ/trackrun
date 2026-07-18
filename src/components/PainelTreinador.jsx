@@ -71,11 +71,13 @@ function PainelTreinador() {
     }
   }
 
-  // recusa o vínculo: desfaz por completo, atleta volta a "sem vínculo"
+  // recusa o vínculo: mantém o treinador_id (histórico de quem convidou),
+  // só muda o status para 'recusado' — evita a condição treinador_id IS NULL,
+  // que causava o 403 na policy de UPDATE
   async function handleRecusar(idDoAtleta) {
     const { error } = await supabase
       .from('profiles')
-      .update({ treinador_id: null, status_vinculo: null })
+      .update({ status_vinculo: 'recusado' })
       .eq('id', idDoAtleta)
 
     if (!error) {
