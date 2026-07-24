@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../supabase'
 import { gerarCodigoConvite } from '../utils/gerarCodigo'
+import { buscarTreinadorPorCodigo } from '../utils/buscarTreinador'
 
 // RegisterForm — tela de criação de conta
 // recebe onCadastroSucesso: função chamada quando o cadastro der certo
@@ -24,19 +25,6 @@ function RegisterForm({ onCadastroSucesso, onVoltarLogin }) {
   const [carregando, setCarregando] = useState(false)
   const [erro, setErro] = useState(null)
 
-  // Fase 3 — busca no banco o treinador dono do código
-  // devolve o treinador ({ id, nome, nome_assessoria }) ou null se não existir
-  async function buscarTreinador(codigoLimpo) {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('id, nome, nome_assessoria')
-      .eq('codigo_convite', codigoLimpo)
-      .maybeSingle() // zero linhas devolve null, sem lançar erro
-
-    if (error) return null
-    return data
-  }
-
   // Fase 3 — roda quando o campo de código perde o foco (onBlur)
   async function validarCodigo() {
     const codigoLimpo = codigo.trim().toUpperCase()
@@ -49,7 +37,7 @@ function RegisterForm({ onCadastroSucesso, onVoltarLogin }) {
     }
 
     setStatusCodigo('validando')
-    const treinador = await buscarTreinador(codigoLimpo)
+    const treinador = await buscarTreinadorPorCodigo(codigoLimpo)
 
     if (treinador) {
       setStatusCodigo('valido')
@@ -84,7 +72,7 @@ function RegisterForm({ onCadastroSucesso, onVoltarLogin }) {
     let treinador = null
 
     if (tipo === 'atleta' && codigoLimpo !== '') {
-      treinador = await buscarTreinador(codigoLimpo)
+      treinador = await buscarTreinadorPorCodigo(codigoLimpo)
 
       if (!treinador) {
         setErro('Código de treinador não encontrado. Confira o código ou deixe o campo vazio.')
