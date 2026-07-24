@@ -8,6 +8,7 @@ import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
 import AtletaFeed from './components/AtletaFeed'
 import PainelTreinador from './components/PainelTreinador'
+import TelaBoasVindas from './components/TelaBoasVindas'
 
 
 
@@ -20,6 +21,9 @@ function App() {
   const [tipoUsuario, setTipoUsuario] = useState(null) // 'atleta' ou 'profissional'
   const painelDireitoRef = useRef(null) // referência para o painel direito
   const [scrollY, setScrollY] = useState(0) // estado para armazenar a posição de rolagem
+
+  // Fase 3, Bloco 4 — controla se já passamos pela checagem de boas-vindas do atleta
+  const [boasVindasResolvida, setBoasVindasResolvida] = useState(false)
 
   // tipoUsuario define qual painel mostrar depois do login
 
@@ -182,6 +186,18 @@ function App() {
                 transition={{ duration: 0.3 }}
               >
                 <PainelTreinador />
+              </motion.div>
+
+            ) : !boasVindasResolvida ? (
+
+              <motion.div
+                key="boas-vindas"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.3 }}
+              >
+                <TelaBoasVindas onContinuar={() => setBoasVindasResolvida(true)} />
               </motion.div>
 
             ) : verTreinos ? (
