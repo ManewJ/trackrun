@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../supabase'
 import Header from './Header'
 import AvisoVinculo from './AvisoVinculo'
-import { Trash2 } from 'lucide-react'
+import { Trash2, CheckCircle2, Zap } from 'lucide-react'
 
 const labelsSensacao = {
   leve: 'Leve',
@@ -84,28 +84,47 @@ function AtletaFeed({ onNovoRegistro }) {
                 <Trash2 size={15} />
               </button>
 
-              {/* linha principal com labels */}
-              <div className="flex items-center gap-5 mb-3">
+              {/* linha principal com labels + badge de status */}
+              <div className="flex items-center justify-between gap-3 mb-3 pr-6">
+                <div className="flex items-center gap-5">
 
-                <div>
-                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Distância</p>
-                  <p className="text-base font-bold text-white">{treino.distancia} <span className="text-xs text-zinc-500 font-normal">km</span></p>
+                  <div>
+                    <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Distância</p>
+                    <p className="text-base font-bold text-white">{treino.distancia} <span className="text-xs
+                     text-zinc-500 font-normal">km</span></p>
+                  </div>
+
+                  <div className="w-px h-8 bg-zinc-700" />
+
+                  <div>
+                    <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Tempo</p>
+                    <p className="text-base font-medium text-white">{treino.tempo}</p>
+                  </div>
+
+                  <div className="w-px h-8 bg-zinc-700" />
+
+                  <div>
+                    <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Sensação</p>
+                    <p className="text-base font-medium text-white">{labelsSensacao[treino.sensacao] ?? '—'}</p>
+                  </div>
+
                 </div>
 
-                <div className="w-px h-8 bg-zinc-700" />
-
-                <div>
-                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Tempo</p>
-                  <p className="text-base font-medium text-white">{treino.tempo}</p>
-                </div>
-
-                <div className="w-px h-8 bg-zinc-700" />
-
-                <div>
-                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Sensação</p>
-                  <p className="text-base font-medium text-white">{labelsSensacao[treino.sensacao] ?? '—'}</p>
-                </div>
-
+                {/* badge de status — concluído (verde) ou quebrei (laranja) */}
+                {treino.status === 'concluido' && (
+                  <span className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/30
+                   text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap">
+                    <CheckCircle2 size={13} />
+                    Concluído
+                  </span>
+                )}
+                {treino.status === 'nao_concluido' && (
+                  <span className="flex items-center gap-1 bg-orange-500/10 border border-orange-500/30
+                   text-orange-400 text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap">
+                    <Zap size={13} />
+                    Quebrei
+                  </span>
+                )}
               </div>
 
               {/* observações */}

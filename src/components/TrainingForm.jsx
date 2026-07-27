@@ -5,6 +5,7 @@ import ProgressBar from './ProgressBar'
 import SensacaoTags from './SensacaoTags'
 import Header from './Header'
 import AvisoVinculo from './AvisoVinculo'
+import { CheckCircle2, Zap } from 'lucide-react'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 16 },
@@ -17,6 +18,9 @@ function TrainingForm({ onRegistrar }) {
   const [tempo, setTempo] = useState('')
   const [sensacao, setSensacao] = useState(null)
   const [observacoes, setObservacoes] = useState('')
+
+  // Fase 3, Bloco 4 — status do treino: 'concluido' (padrão) ou 'nao_concluido' ("Quebrei")
+  const [status, setStatus] = useState('concluido')
 
   const camposPreenchidos = [
     distancia !== '',
@@ -42,6 +46,7 @@ function TrainingForm({ onRegistrar }) {
         tempo,
         sensacao,
         observacoes,
+        status,
       })
 
     if (error) {
@@ -50,7 +55,7 @@ function TrainingForm({ onRegistrar }) {
     }
 
     // só chama onRegistrar depois de confirmar que salvou no banco
-    onRegistrar({ distancia, tempo, sensacao, observacoes })
+    onRegistrar({ distancia, tempo, sensacao, observacoes, status })
   }
 
   return (
@@ -121,6 +126,40 @@ function TrainingForm({ onRegistrar }) {
           <SensacaoTags onSelecionar={setSensacao} />
         </motion.div>
 
+        {/* Fase 3, Bloco 4 — como foi o treino */}
+        <motion.div {...fadeUp(0.35)} className="mb-4">
+          <label className="text-[10px] font-medium text-neutral-400 lg:text-neutral-500 uppercase tracking-widest mb-1 block">
+            Como foi o treino?
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setStatus('concluido')}
+              className={`flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold tracking-wide transition-colors ${
+                status === 'concluido'
+                  ? 'bg-emerald-500 text-white'
+                  : 'bg-neutral-900 border border-neutral-800 text-neutral-400 hover:bg-neutral-800'
+              }`}
+            >
+              <CheckCircle2 size={16} />
+              Concluído com sucesso
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setStatus('nao_concluido')}
+              className={`flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold tracking-wide transition-colors ${
+                status === 'nao_concluido'
+                  ? 'bg-orange-600 text-white'
+                  : 'bg-neutral-900 border border-neutral-800 text-neutral-400 hover:bg-neutral-800'
+              }`}
+            >
+              <Zap size={16} />
+              Quebrei
+            </button>
+          </div>
+        </motion.div>
+
         <motion.div {...fadeUp(0.4)} className="flex flex-col gap-1 mb-5">
           <label className="text-[10px] font-medium text-neutral-400 lg:text-neutral-500 uppercase tracking-widest">
             Observações
@@ -128,7 +167,11 @@ function TrainingForm({ onRegistrar }) {
           <textarea
             value={observacoes}
             onChange={(e) => setObservacoes(e.target.value)}
-            placeholder="Como foi o treino? Algum detalhe importante..."
+            placeholder={
+              status === 'nao_concluido'
+                ? 'Conta pra gente o que rolou...'
+                : 'Como foi o treino? Algum detalhe importante...'
+            }
             rows={3}
             className="bg-neutral-900 border border-neutral-800 rounded-lg p-3 text-white text-sm placeholder-neutral-700
              focus:border-orange-500 outline-none transition-colors resize-none"
