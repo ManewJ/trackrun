@@ -33,7 +33,7 @@ function LeftPanel({ imagem = '/images/corrida-sol.jpg', scrollY = 0 }) {
         }}
       />
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40"></div>
+      <div className="absolute inset-0 bg-linear-to-t from-black via-black/80 to-black/40"></div>
 
       <motion.div {...fadeLeft(0.1)} className="relative z-10 inline-flex items-center gap-2 self-start
        text-orange-500 text-xs font-medium tracking-widest uppercase border
