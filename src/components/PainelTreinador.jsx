@@ -3,6 +3,13 @@ import { supabase } from '../supabase'
 import Header from './Header'
 import { CheckCircle2, Zap } from 'lucide-react'
 
+const labelsSensacao = {
+  leve: 'Leve',
+  moderado: 'Moderado',
+  pesado: 'Pesado',
+  limite: 'No limite',
+}
+
 // PainelTreinador — tela principal do treinador logado
 function PainelTreinador() {
 
@@ -74,7 +81,7 @@ function PainelTreinador() {
 
     const { data: treinos } = await supabase
       .from('treinos')
-      .select('id, atleta_id, distancia, status, observacoes, created_at')
+      .select('id, atleta_id, distancia, tempo, sensacao, status, observacoes, created_at')
       .in('atleta_id', idsAtletas)
       .gte('created_at', seteDiasAtras.toISOString())
       .order('created_at', { ascending: false })
@@ -293,6 +300,10 @@ function PainelTreinador() {
                       </span>
                     )}
                   </div>
+
+                  <p className="text-xs text-zinc-400 mt-1">
+                    {treino.tempo} min · {labelsSensacao[treino.sensacao] ?? '—'}
+                  </p>
 
                   {treino.observacoes && (
                     <div className="mt-2.5 ml-0 bg-[#1E1613] border-l-2 border-orange-600 px-3 py-2 rounded-r-md">
