@@ -122,7 +122,7 @@ function App() {
     }')`
   }}
 >
-  <div className="absolute inset-0 bg-black/70"></div>
+  <div className="absolute inset-0 bg-black/78"></div>
 </div>
 
       {/* imagem do painel esquerdo muda conforme o contexto do usuário */}

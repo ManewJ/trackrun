@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase'
 import Header from './Header'
-import { CheckCircle2, Zap } from 'lucide-react'
+import { CheckCircle2, Zap, RefreshCw } from 'lucide-react'
+import { gerarCodigoConvite } from '../utils/gerarCodigo'
 
 const labelsSensacao = {
   leve: 'Leve',
@@ -20,6 +21,10 @@ function PainelTreinador() {
   const [semTreinoRecente, setSemTreinoRecente] = useState([])
   const [carregando, setCarregando] = useState(true)
   const [textoBotaoCopiar, setTextoBotaoCopiar] = useState('Copiar')
+
+  // Bloco 6 — gerar novo código de convite
+  const [mostrarModalRegenerar, setMostrarModalRegenerar] = useState(false)
+  const [regenerando, setRegenerando] = useState(false)
 
   useEffect(() => {
     async function buscarPerfil() {
@@ -128,6 +133,26 @@ function PainelTreinador() {
     }, 2000)
   }
 
+  // gera um novo código e substitui o atual — não afeta atletas já vinculados,
+  // só invalida o código antigo para novas solicitações a partir de agora
+  async function handleRegenerar() {
+    setRegenerando(true)
+
+    const novoCodigo = gerarCodigoConvite()
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({ codigo_convite: novoCodigo })
+      .eq('id', perfil.id)
+
+    if (!error) {
+      setPerfil((anterior) => ({ ...anterior, codigo_convite: novoCodigo }))
+      setMostrarModalRegenerar(false)
+    }
+
+    setRegenerando(false)
+  }
+
   async function handleAceitar(idDoAtleta) {
     const { error } = await supabase
       .from('profiles')
@@ -196,20 +221,31 @@ function PainelTreinador() {
       </div>
 
       {/* card do código de convite */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 flex items-center justify-between gap-3 mb-8">
-        <div>
-          <p className="text-xs text-zinc-500 mb-1">Seu código de convite</p>
-          <p className="text-xl font-bold tracking-widest text-amber-400">
-            {perfil?.codigo_convite}
-          </p>
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 mb-8">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs text-zinc-500 mb-1">Seu código de convite</p>
+            <p className="text-xl font-bold tracking-widest text-amber-400">
+              {perfil?.codigo_convite}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleCopiar}
+            className="bg-[#FF4500] text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors whitespace-nowrap"
+          >
+            {textoBotaoCopiar}
+          </button>
         </div>
 
         <button
           type="button"
-          onClick={handleCopiar}
-          className="bg-[#FF4500] text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors whitespace-nowrap"
+          onClick={() => setMostrarModalRegenerar(true)}
+          className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-orange-400 transition-colors mt-3"
         >
-          {textoBotaoCopiar}
+          <RefreshCw size={12} />
+          Gerar novo código
         </button>
       </div>
 
@@ -343,6 +379,40 @@ function PainelTreinador() {
             ))}
           </div>
         </>
+      )}
+
+      {/* modal de confirmação — gerar novo código */}
+      {mostrarModalRegenerar && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 max-w-sm w-full text-center">
+            <div className="w-14 h-14 rounded-full bg-orange-500/10 border border-orange-500/40 flex items-center justify-center mb-5 mx-auto">
+              <RefreshCw className="w-6 h-6 text-orange-500" />
+            </div>
+
+            <h2 className="text-lg font-medium text-white mb-2">Gerar novo código?</h2>
+            <p className="text-sm text-zinc-400 mb-6">
+              O código atual (<span className="text-amber-400 font-bold">{perfil?.codigo_convite}</span>) deixará de funcionar para novas solicitações. Atletas já vinculados não são afetados.
+            </p>
+
+            <button
+              type="button"
+              onClick={handleRegenerar}
+              disabled={regenerando}
+              className="w-full bg-[#FF4500] hover:bg-orange-600 transition-colors rounded-lg h-11 text-white text-xs font-bold tracking-widest uppercase mb-3 disabled:opacity-50"
+            >
+              {regenerando ? 'Gerando...' : 'Sim, gerar novo código'}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setMostrarModalRegenerar(false)}
+              disabled={regenerando}
+              className="w-full border border-zinc-700 hover:border-orange-500 hover:text-orange-500 transition-colors rounded-lg h-11 text-zinc-400 text-xs font-medium tracking-widest uppercase disabled:opacity-50"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
       )}
 
     </div>
