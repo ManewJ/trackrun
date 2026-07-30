@@ -84,9 +84,11 @@ function AtletaFeed({ onNovoRegistro }) {
                 <Trash2 size={15} />
               </button>
 
-              {/* linha principal com labels + badge de status */}
-              <div className="flex items-center justify-between gap-3 mb-3 pr-6">
-                <div className="flex items-center gap-5">
+              {/* linha principal com labels + badge de status
+                  mobile: empilha (flex-col) para o badge não cortar nem sobrepor
+                  sm+ (640px): volta a ficar lado a lado, como no design original */}
+              <div className="flex flex-col sm:flex-row sm:items-center items-start justify-between gap-3 mb-3 pr-6">
+                <div className="flex items-center gap-3 sm:gap-5 flex-wrap">
 
                   <div>
                     <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Distância</p>
@@ -133,7 +135,7 @@ function AtletaFeed({ onNovoRegistro }) {
               )}
 
               {/* data */}
-              <p className="text-xs text-zinc-600">
+              <p className="text-xs text-zinc-500">
                 {new Date(treino.created_at).toLocaleDateString('pt-BR', {
                   day: '2-digit',
                   month: 'long',
